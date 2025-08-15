@@ -1,0 +1,128 @@
+{% extends "sg/base.html" %} {% load static %} {% block title %}SLAYbrations ·
+Party & Performances{% endblock %} {% block content %}
+
+<section class="p-4 p-md-5 rounded-4 border border-secondary hero mb-4">
+  <div class="col-12 col-lg-8 mx-auto text-center">
+    <h1 class="display-5 fw-bold mb-2">End of Year Slaybration!</h1>
+    <p class="lead mb-2">Party & Performances</p>
+
+    <p class="h6 mb-3">
+      {% if events and events.0.start_datetime %} {{
+      events.0.start_datetime|date:"l j F, g:i A" }} {% else %} Saturday 14
+      December, 7:30pm {% endif %}
+    </p>
+
+    <p class="mb-3">
+      Join the fun at our End of Year Slaybration! Enjoy performances from some
+      of our incredible SLAY community and then dance the night away! Friends
+      and family welcome, positive &amp; FUN vibes guaranteed to celebrate the
+      year!
+    </p>
+
+    <div class="mb-3">
+      <span class="badge badge-pink text-dark fw-semibold px-3 py-2"
+        >TICKETS ON SALE NOW!</span
+      >
+    </div>
+
+    {% if events %}
+    <a
+      class="btn btn-accent btn-lg"
+      href="{% url 'sg:slaybrations_register' events.0.slug %}"
+      >Book Now</a
+    >
+    {% else %}
+    <a class="btn btn-accent btn-lg disabled" role="button" aria-disabled="true"
+      >Book Now</a
+    >
+    {% endif %}
+  </div>
+</section>
+
+<section class="mb-4">
+  <div class="col-12 col-lg-8 mx-auto">
+    <figure class="rounded-4 overflow-hidden border border-secondary">
+      {% if events and events.0.banner_image %}
+      <img
+        src="{{ events.0.banner_image.url }}"
+        class="w-100"
+        alt="SLAYbration banner"
+        loading="lazy"
+      />
+      {% else %}
+      <img
+        src="{% static 'img/placeholder.jpg' %}"
+        class="w-100"
+        alt="SLAYbration banner"
+        loading="lazy"
+      />
+      {% endif %}
+    </figure>
+  </div>
+</section>
+
+<!-- Schedule -->
+<section class="mb-5">
+  <div class="col-12 col-lg-8 mx-auto">
+    <h2 class="h4 text-center mb-3">Performances &amp; Party</h2>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card h-100 position-relative">
+          <div class="card-body text-center">
+            <div class="h6 text-uppercase text-muted mb-1">7:30pm</div>
+            <p class="mb-0 card-text">Grab a drink in the foyer</p>
+          </div>
+          <a class="stretched-link" href="#tickets" aria-label="Tickets"></a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 position-relative">
+          <div class="card-body text-center">
+            <div class="h6 text-uppercase text-muted mb-1">7:45pm</div>
+            <p class="mb-0 card-text">Enjoy SLAY performances, plus games</p>
+          </div>
+          <a class="stretched-link" href="#tickets" aria-label="Tickets"></a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 position-relative">
+          <div class="card-body text-center">
+            <div class="h6 text-uppercase text-muted mb-1">
+              8:45pm till late
+            </div>
+            <p class="mb-0 card-text">Dance &amp; Party the night away</p>
+            <p class="small text-muted mb-0">Music, Drinks, Good vibes</p>
+          </div>
+          <a class="stretched-link" href="#tickets" aria-label="Tickets"></a>
+        </div>
+      </div>
+    </div>
+
+    <div id="tickets" class="text-center mt-4">
+      {% if events %}
+      <a
+        class="btn btn-accent btn-lg"
+        href="{% url 'sg:slaybrations_register' events.0.slug %}"
+        >Book Now</a
+      >
+      {% else %}
+      <a
+        class="btn btn-accent btn-lg disabled"
+        role="button"
+        aria-disabled="true"
+        >Book Now</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<p class="text-center col-12 col-lg-8 mx-auto">
+  Invite your family and friends or come on your own and meet someone new. The
+  community is welcoming, FUN and super supportive.
+</p>
+
+{% endblock %}

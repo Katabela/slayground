@@ -1,0 +1,11 @@
+{% extends "sg/base.html" %} {% block title %}Quick Create Session ·
+Slayground{% endblock %} {% block content %}
+<h1 class="h4 mb-3">Quick Create Session</h1>
+<form method="post" class="card card-body">
+  {% csrf_token %} {{ form.as_p }}
+  <button class="btn btn-light" type="submit">Create</button>
+  <a class="btn btn-outline-light ms-2" href="{% url 'sg:class_list' %}"
+    >Back</a
+  >
+</form>
+{% endblock %}

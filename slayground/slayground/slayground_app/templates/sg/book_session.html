@@ -1,0 +1,18 @@
+{% extends "sg/base.html" %} {% block title %}Book · {{ session.class_type.title
+}}{% endblock %} {% block content %}
+<h1 class="h4 mb-3">Book: {{ session.class_type.title }}</h1>
+<p class="text-muted">
+  {{ session.start_datetime|date:"D, M j · H:i" }} – {{
+  session.end_datetime|date:"H:i" }} · Spots left: {{ session.spots_left }}
+</p>
+
+<form method="post" class="card card-body">
+  {% csrf_token %} {{ form.as_p }}
+  <button class="btn btn-light" type="submit">Create Booking</button>
+  <a
+    class="btn btn-outline-light ms-2"
+    href="{% url 'sg:class_detail' session.id %}"
+    >Back</a
+  >
+</form>
+{% endblock %}

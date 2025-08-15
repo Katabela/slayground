@@ -1,0 +1,224 @@
+{% extends "sg/base.html" %} {% load static %} {% block title %}SLAYvents ·
+Private Parties{% endblock %} {% block content %}
+
+<!-- Hero -->
+<section class="p-4 p-md-5 rounded-4 border border-secondary hero mb-4">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <h1 class="display-5 fw-bold mb-2">SLAYvents — Private Parties</h1>
+      <p class="lead mb-3">
+        Birthdays, bachelorettes, team nights, or just because. We’ll craft a
+        confidence-fueled dance session tailored to your vibe.
+      </p>
+      <ul class="mb-0">
+        <li>Custom music & choreography (heels optional)</li>
+        <li>Beginner-friendly, all bodies welcome</li>
+        <li>Studio or on-location</li>
+      </ul>
+    </div>
+    <div class="col-lg-5 text-center">
+      <div class="ratio ratio-16x9 rounded-4 border border-secondary">
+        <iframe
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          title="SLAYvents Teaser"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="row g-4 align-items-start">
+  <!-- Popular party themes (optional) -->
+  <div class="col-lg-7">
+    {% if templates %}
+    <h2 class="h4 mb-3">Popular Party Themes</h2>
+    <div class="row g-3">
+      {% for e in templates %}
+      <div class="col-md-6">
+        <div class="card h-100 position-relative">
+          {% if e.banner_image %}
+          <img
+            src="{{ e.banner_image.url }}"
+            class="card-img-top sg-card-img"
+            alt="{{ e.title }}"
+            loading="lazy"
+          />
+          {% else %}
+          <img
+            src="{% static 'img/class-placeholder.jpg' %}"
+            class="card-img-top sg-card-img"
+            alt=""
+            loading="lazy"
+          />
+          {% endif %}
+          <div class="card-body">
+            <span class="badge bg-secondary mb-2"
+              >{{ e.get_event_type_display }}</span
+            >
+            <h3 class="h6 mb-1">{{ e.title }}</h3>
+            {% if e.description %}
+            <p class="small text-muted mb-0">
+              {{ e.description|truncatewords:28 }}
+            </p>
+            {% endif %}
+            <a
+              href="#inquiry"
+              class="stretched-link"
+              aria-label="Start inquiry for {{ e.title }}"
+            ></a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card border-secondary">
+      <div class="card-body">
+        <p class="mb-0 text-muted">
+          Pick your theme! Heels, pop divas, or total custom ✨
+        </p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Inquiry form (centered & sticky) -->
+  <div class="col-lg-5 d-flex justify-content-center">
+    <div
+      class="position-sticky"
+      style="top: 84px; max-width: 560px; width: 100%"
+    >
+      <div class="card inquiry-form border-secondary shadow-sm">
+        <div class="card-body">
+          <h2 id="inquiry" class="h5 mb-3">Start your SLAYvent</h2>
+
+          <form method="post" class="form-slay" novalidate>
+            {% csrf_token %} {% if form.non_field_errors %}
+            <div class="alert alert-warning" role="alert">
+              {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label
+                  class="form-label"
+                  for="{{ form.full_name.id_for_label }}"
+                  >Full name</label
+                >
+                {{ form.full_name }}
+                <div class="invalid-feedback d-block">
+                  {{ form.full_name.errors|striptags }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="{{ form.email.id_for_label }}"
+                  >Email</label
+                >
+                {{ form.email }}
+                <div class="invalid-feedback d-block">
+                  {{ form.email.errors|striptags }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="{{ form.phone.id_for_label }}"
+                  >Phone (optional)</label
+                >
+                {{ form.phone }}
+                <div class="invalid-feedback d-block">
+                  {{ form.phone.errors|striptags }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="{{ form.category.id_for_label }}"
+                  >Occasion</label
+                >
+                {{ form.category }}
+                <div class="invalid-feedback d-block">
+                  {{ form.category.errors|striptags }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label
+                  class="form-label"
+                  for="{{ form.preferred_date.id_for_label }}"
+                  >Preferred date</label
+                >
+                {{ form.preferred_date }}
+                <div class="invalid-feedback d-block">
+                  {{ form.preferred_date.errors|striptags }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label
+                  class="form-label"
+                  for="{{ form.attendees_count.id_for_label }}"
+                  >Guests</label
+                >
+                {{ form.attendees_count }}
+                <div class="invalid-feedback d-block">
+                  {{ form.attendees_count.errors|striptags }}
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label
+                  class="form-label"
+                  for="{{ form.city_or_studio.id_for_label }}"
+                  >City / Studio</label
+                >
+                {{ form.city_or_studio }}
+                <div class="invalid-feedback d-block">
+                  {{ form.city_or_studio.errors|striptags }}
+                </div>
+              </div>
+
+              {% if form.template_event %}
+              <div class="col-12">
+                <label
+                  class="form-label"
+                  for="{{ form.template_event.id_for_label }}"
+                  >Theme (optional)</label
+                >
+                {{ form.template_event }}
+                <div class="invalid-feedback d-block">
+                  {{ form.template_event.errors|striptags }}
+                </div>
+              </div>
+              {% endif %}
+
+              <div class="col-12">
+                <label class="form-label" for="{{ form.message.id_for_label }}"
+                  >Tell us your vision ✨</label
+                >
+                {{ form.message }}
+                <div class="invalid-feedback d-block">
+                  {{ form.message.errors|striptags }}
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid mt-3">
+              <button class="btn btn-accent btn-lg" type="submit">
+                Send inquiry
+              </button>
+            </div>
+          </form>
+
+          <p class="small text-muted mt-3 mb-0">
+            We’ll reply within 1–2 business days with availability and a custom
+            quote.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

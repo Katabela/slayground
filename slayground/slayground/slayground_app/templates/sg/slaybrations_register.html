@@ -1,0 +1,18 @@
+{% extends "sg/base.html" %} {% block title %}{% endblock %} {% block content %}
+<h1 class="h4 mb-3">Register: {{ event.title }}</h1>
+{% if event.start_datetime %}
+<p class="text-muted">
+  {{ event.start_datetime|date:"D, M j · H:i" }}{% if event.end_datetime %} – {{
+  event.end_datetime|date:"H:i" }}{% endif %}
+</p>
+{% endif %}
+<form method="post" class="card card-body">
+  {% csrf_token %} {{ form.as_p }}
+  <button class="btn btn-light" type="submit">Submit Registration</button>
+  <a
+    class="btn btn-outline-light ms-2"
+    href="{% url 'sg:slaybrations_detail' event.slug %}"
+    >Back</a
+  >
+</form>
+{% endblock %}

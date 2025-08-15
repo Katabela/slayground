@@ -1,0 +1,80 @@
+{% extends "sg/base.html" %} {% load static %} {% block title %}Content ·
+Slayground{% endblock %} {% block content %}
+<h1 class="mb-3">Content</h1>
+
+{% if categories %}
+<div class="mb-3">
+  {% for c in categories %}
+  <a
+    class="badge {% if active_category and c.id == active_category.id %}bg-light text-dark{% else %}bg-secondary{% endif %} me-1"
+    href="{% url 'sg:content_hub' %}?category={{ c.slug|urlencode }}"
+    >{{ c.name }}</a
+  >
+  {% endfor %} {% if active_category %}
+  <a class="badge bg-dark border ms-1" href="{% url 'sg:content_hub' %}"
+    >Clear</a
+  >
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="row g-3">
+  {% for m in items %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 position-relative">
+      {% if m.image %}
+      <img
+        src="{{ m.image.url }}"
+        class="card-img-top sg-card-img"
+        alt="{{ m.title|default:'Content image' }}"
+        loading="lazy"
+      />
+      {% endif %}
+
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">{{ m.category.name }}</span>
+          {% if m.visibility == "MEMBERS" %}
+          <span class="badge bg-warning text-dark">Members</span>
+          {% endif %}
+        </div>
+
+        <h3 class="h5">{{ m.title }}</h3>
+        {% if m.summary %}
+        <p class="small text-muted">{{ m.summary|truncatewords:28 }}</p>
+        {% endif %} {% if m.video_url %}
+        <a
+          class="btn btn-sm btn-light"
+          href="{{ m.video_url }}"
+          target="_blank"
+          rel="noopener"
+          >Watch</a
+        >
+        {% elif m.audio_file %}
+        <audio controls class="w-100 mt-2">
+          <source src="{{ m.audio_file.url }}" />
+        </audio>
+        {% elif m.attachment %}
+        <a
+          class="btn btn-sm btn-outline-light"
+          href="{{ m.attachment.url }}"
+          download
+          >Download</a
+        >
+        {% elif m.external_url %}
+        <a
+          class="btn btn-sm btn-light"
+          href="{{ m.external_url }}"
+          target="_blank"
+          rel="noopener"
+          >Open</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">No content yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

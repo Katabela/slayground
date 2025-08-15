@@ -1,0 +1,115 @@
+{% extends "sg/base.html" %}{% load static %}{% block content %}
+<section class="hero p-5 rounded-4 mb-4 border border-secondary">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <h1 class="display-5 fw-bold">
+        Move with confidence. <br />
+        <span class="badge badge-pink">SLAY</span> every day.
+      </h1>
+      <p class="lead mt-3">
+        Inclusive, empowering dance classes and mindset content to help you feel
+        like your boldest self.
+      </p>
+      <a class="btn btn-light me-2" href="{% url 'sg:class_list' %}"
+        >Browse Classes</a
+      >
+      <a class="btn btn-outline-light" href="{% url 'sg:content_hub' %}"
+        >Explore Content</a
+      >
+    </div>
+    <div class="col-lg-5 text-center">
+      <div class="ratio ratio-16x9 rounded-4 border border-secondary">
+        <iframe
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          title="Slayground Teaser"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<h2 class="h4 mb-3">Upcoming Classes</h2>
+<div class="row g-3">
+  {% for s in upcoming %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 position-relative">
+      {% if s.class_type.thumbnail %}
+      <img
+        src="{{ s.class_type.thumbnail.url }}"
+        class="card-img-top sg-card-img"
+        alt="Thumbnail for {{ s.class_type.title }}"
+        loading="lazy"
+      />
+      {% else %}
+      <img
+        src="{% static 'img/placeholder.png' %}"
+        class="card-img-top sg-card-img"
+        alt="Placeholder image"
+        loading="lazy"
+      />
+      {% endif %}
+      <div class="card-body">
+        <span class="badge bg-secondary mb-2"
+          >{{ s.class_type.get_level_display }}</span
+        >
+        <h3 class="h5 mb-1">{{ s.class_type.title }}</h3>
+
+        <!-- Day-of-week + time -->
+        <div class="small text-muted">
+          {{ s.start_datetime|date:"l" }}s · {{ s.start_datetime|date:"g:i A" }}
+        </div>
+
+        {% if s.location %}
+        <div class="small mt-1">
+          {{ s.location.name }} — {{ s.location.city }}
+        </div>
+        {% endif %}
+
+        <div class="mt-2">Spots left: <strong>{{ s.spots_left }}</strong></div>
+
+        <!-- Make entire card clickable -->
+        <a
+          href="{% url 'sg:class_detail' s.id %}"
+          class="stretched-link"
+          aria-label="View details for {{ s.class_type.title }}"
+        ></a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">No upcoming classes yet—check back soon!</p>
+  {% endfor %}
+</div>
+
+<h2 class="h4 mt-5 mb-3">Latest Content</h2>
+<div class="row g-3">
+  {% for m in latest_content %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <span class="badge bg-secondary mb-2">{{ m.category.name }}</span>
+        <h3 class="h5">{{ m.title }}</h3>
+        {% if m.summary %}
+        <p class="small text-muted">{{ m.summary|truncatewords:24 }}</p>
+        {% endif %} {% if m.video_url %}
+        <a
+          class="btn btn-sm btn-light"
+          href="{{ m.video_url }}"
+          target="_blank"
+          rel="noopener"
+          >Watch</a
+        >
+        {% elif m.audio_file %}
+        <audio controls class="w-100 mt-2">
+          <source src="{{ m.audio_file.url }}" />
+        </audio>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">Fresh content coming soon.</p>
+  {% endfor %}
+</div>
+{% endblock %}

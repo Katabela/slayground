@@ -1,0 +1,63 @@
+{% extends "sg/base.html" %} {% block title %}{{ session.class_type.title }} ·
+Slayground{% endblock %} {% block content %}
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card mb-3">
+      <div class="card-body">
+        <span class="badge bg-secondary mb-2"
+          >{{ session.class_type.get_level_display }}</span
+        >
+        <h1 class="h3">{{ session.class_type.title }}</h1>
+
+        <!-- prettier-ignore -->
+        <div class="small text-muted">
+          {% with sd=session.start_datetime ed=session.end_datetime %} 
+          {{ sd|date:"l" }} · {{ sd|date:"g:i A" }}{% if ed %}&nbsp;–&nbsp;{{ed|date:"g:i A" }}{% endif %} {% endwith %}
+        </div>
+
+        {% if session.instructor %}
+        <div class="mt-2">
+          Instructor: <strong>{{ session.instructor.name }}</strong>
+        </div>
+        {% endif %} {% if session.location %}
+        <div class="mt-1">
+          Location: {{ session.location.name }}, {{ session.location.city }}
+        </div>
+        {% endif %} {% if session.notes %}
+        <p class="mt-3">{{ session.notes }}</p>
+        {% endif %}
+
+        <div>Spots left: <strong>{{ session.spots_left }}</strong></div>
+      </div>
+
+      <div class="card-footer">
+        {% if user.is_authenticated %}
+        <a class="btn btn-light" href="{% url 'sg:book_session' session.id %}"
+          >Book this class</a
+        >
+        {% else %}
+        <a
+          class="btn btn-light"
+          href="{% url 'sg:login' %}?next={% url 'sg:book_session' session.id %}"
+          >Login to book</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h5">What to expect</h2>
+        <p class="small text-muted mb-0">
+          Bring water, wear what makes you feel confident, and get ready to have
+          fun.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

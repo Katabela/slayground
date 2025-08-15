@@ -1,0 +1,67 @@
+{% extends "sg/base.html" %} {% block title %}Log in · Slayground{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card border-secondary">
+      <div class="card-body">
+        <h1 class="h4 mb-3">Log in</h1>
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-warning" role="alert">
+          {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.username.id_for_label }}"
+              >Username</label
+            >
+            {{ form.username }}
+            <div class="invalid-feedback d-block">
+              {{ form.username.errors|striptags }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.password.id_for_label }}"
+              >Password</label
+            >
+            {{ form.password }}
+            <div class="invalid-feedback d-block">
+              {{ form.password.errors|striptags }}
+            </div>
+          </div>
+
+          <input
+            type="hidden"
+            name="{{ redirect_field_name }}"
+            value="{{ next }}"
+          />
+
+          <div class="d-grid">
+            <button class="btn btn-light" type="submit">Log in</button>
+          </div>
+        </form>
+
+        <div class="text-center mt-3">
+          <span class="text-muted">New here?</span>
+          <a
+            class="btn btn-link p-0"
+            href="{% url 'sg:signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}"
+            >Create an account</a
+          >
+        </div>
+
+        <div class="text-center mt-3">
+          <a class="btn btn-link p-0" href="{% url 'sg:home' %}"
+            >Back to Home</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

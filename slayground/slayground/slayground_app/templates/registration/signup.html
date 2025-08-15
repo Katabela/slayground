@@ -1,0 +1,81 @@
+{% extends "sg/base.html" %} {% block title %}Sign up · Slayground{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card border-secondary">
+      <div class="card-body">
+        <h1 class="h4 mb-3">Create your account</h1>
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-warning" role="alert">
+          {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %} {# carry through ?next=... if present #}
+          <input type="hidden" name="next" value="{{ next|default:'' }}" />
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.username.id_for_label }}"
+              >Username</label
+            >
+            {{ form.username }}
+            <div class="invalid-feedback d-block">
+              {{ form.username.errors|striptags }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.email.id_for_label }}"
+              >Email</label
+            >
+            {{ form.email }}
+            <div class="invalid-feedback d-block">
+              {{ form.email.errors|striptags }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.password1.id_for_label }}"
+              >Password</label
+            >
+            {{ form.password1 }}
+            <div class="invalid-feedback d-block">
+              {{ form.password1.errors|striptags }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.password2.id_for_label }}"
+              >Confirm password</label
+            >
+            {{ form.password2 }}
+            <div class="invalid-feedback d-block">
+              {{ form.password2.errors|striptags }}
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button class="btn btn-light" type="submit">Create account</button>
+          </div>
+        </form>
+
+        <div class="text-center mt-3">
+          <span class="text-muted">Already have an account?</span>
+          <a
+            class="btn btn-link p-0"
+            href="{% url 'sg:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}"
+            >Log in</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <p class="small text-muted mt-3 text-center">
+      By creating an account you agree to our community guidelines. Be kind,
+      dance bold. 💖
+    </p>
+  </div>
+</div>
+{% endblock %}

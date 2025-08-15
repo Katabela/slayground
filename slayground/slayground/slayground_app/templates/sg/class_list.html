@@ -1,0 +1,149 @@
+{% extends "sg/base.html" %}{% load static %} {% block title %}Classes ·
+Slayground{% endblock %} {% block content %}
+<h1 class="mb-3">Upcoming Classes</h1>
+
+<form method="get" class="card filter-card border-secondary mb-4">
+  <div
+    class="card-header bg-transparent py-3 d-flex align-items-center justify-content-between"
+  >
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge badge-pink rounded-pill px-3 py-2"
+        >Filter classes</span
+      >
+    </div>
+
+    {% if request.GET %}
+    <a href="{% url 'sg:class_list' %}" class="btn btn-sm btn-outline-light"
+      >Clear</a
+    >
+    {% endif %}
+  </div>
+
+  <div class="card-body">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-6 col-lg-4">
+        <label class="form-label small text-uppercase">Class</label>
+        {{ form.class_type }}
+      </div>
+
+      <div class="col-6 col-md-3 col-lg-2">
+        <label class="form-label small text-uppercase">Level</label>
+        {{ form.level }}
+      </div>
+
+      <div class="col-6 col-md-3 col-lg-3">
+        <label class="form-label small text-uppercase">Instructor</label>
+        {{ form.instructor }}
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-3">
+        <label class="form-label small text-uppercase">Location</label>
+        {{ form.location }}
+      </div>
+
+      <div class="col-6 col-md-3 col-lg-2">
+        <label class="form-label small text-uppercase">From</label>
+        {{ form.date_from }}
+      </div>
+
+      <div class="col-6 col-md-3 col-lg-2">
+        <label class="form-label small text-uppercase">To</label>
+        {{ form.date_to }}
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-3 ms-auto">
+        <div class="d-grid">
+          <button class="btn btn-light" type="submit">Apply Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="row g-3">
+  {% for s in sessions %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 position-relative">
+      {% if s.class_type.thumbnail %}
+      <img
+        src="{{ s.class_type.thumbnail.url }}"
+        class="card-img-top sg-card-img"
+        alt="Thumbnail for {{ s.class_type.title }}"
+        loading="lazy"
+      />
+      {% else %}
+      <img
+        src="{% static 'img/placeholder.png' %}"
+        class="card-img-top sg-card-img"
+        alt="Placeholder image"
+        loading="lazy"
+      />
+      {% endif %}
+      <div class="card-body">
+        <span class="badge bg-secondary mb-2"
+          >{{ s.class_type.get_level_display }}</span
+        >
+        <h3 class="h5 mb-1">{{ s.class_type.title }}</h3>
+
+        <!-- Day-of-week + time -->
+        <div class="small text-muted">
+          {{ s.start_datetime|date:"l" }}s · {{ s.start_datetime|date:"g:i A" }}
+        </div>
+
+        {% if s.location %}
+        <div class="small mt-1">
+          {{ s.location.name }} — {{ s.location.city }}
+        </div>
+        {% endif %}
+
+        <div class="mt-2">Spots left: <strong>{{ s.spots_left }}</strong></div>
+
+        <!-- Make entire card clickable -->
+        <a
+          href="{% url 'sg:class_detail' s.id %}"
+          class="stretched-link"
+          aria-label="View details for {{ s.class_type.title }}"
+        ></a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">No classes match your filters.</p>
+  {% endfor %}
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="mt-4">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ page_obj.previous_page_number }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}"
+        >«</a
+      >
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">«</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link"
+        >{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span
+      >
+    </li>
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ page_obj.next_page_number }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}"
+        >»</a
+      >
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">»</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %} {% endblock %}

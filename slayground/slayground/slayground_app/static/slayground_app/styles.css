@@ -1,0 +1,318 @@
+/* slayground_app/styles.css */
+/* CSS variables for easy theming */
+:root {
+  --bgblack: #0f0f12;
+  --bg: #ae0269;
+  --text: #eaeaf2;
+  --card: #181820;
+  --card-border: #272737;
+  --nav: #14141a;
+  --accent: #ff78c8;
+}
+
+/* Base */
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: linear-gradient(
+    135deg,
+    var(--bgblack) 0%,
+    #1b1120 35%,
+    #4a0e34 65%,
+    var(--bg) 100%
+  );
+  color: var(--text);
+  background-attachment: fixed;
+}
+
+p {
+  color: #fff;
+}
+
+a,
+.btn-link {
+  color: var(--accent);
+}
+
+a:hover,
+a:focus-visible {
+  color: #ff9bd6; /* lighter hot pink on hover/focus */
+  text-decoration-color: var(--accent);
+  outline: none;
+}
+
+a:active {
+  color: #ff56b9; /* pressed state */
+}
+
+/* Text selection highlight (hot pink glow) */
+::selection {
+  background: rgba(255, 120, 200, 0.35);
+  color: #fff;
+}
+
+/* Mobile tap highlight (iOS/Safari/Chrome) */
+a {
+  -webkit-tap-highlight-color: rgba(255, 120, 200, 0.35);
+}
+
+/* Navbar */
+.navbar {
+  background: var(--nav) !important;
+}
+
+/* Navbar active link (works with .active or aria-current="page") */
+.navbar .nav-link.active,
+.navbar .nav-link[aria-current="page"] {
+  color: var(--accent) !important;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* Optional: subtle hover underline for all links */
+a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+/* Badges */
+.badge-pink {
+  background: var(--accent);
+}
+
+/* Hero background */
+.hero {
+  background: radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(255, 120, 200, 0.25),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+      1000px 500px at 90% 10%,
+      rgba(255, 120, 200, 0.15),
+      rgba(0, 0, 0, 0)
+    );
+}
+
+/* Calendar page container */
+#calendar {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+/* Utility tweaks */
+.border-secondary {
+  border-color: var(--card-border) !important;
+}
+.btn-light {
+  color: #000; /* readable on light button */
+}
+
+/* CARD STYLES */
+.card.position-relative:hover {
+  cursor: pointer;
+}
+
+.card .card-body {
+  padding: clamp(1rem, 2vw + 0.75rem, 1.5rem);
+}
+
+.card .card-header,
+.card .card-footer {
+  padding: clamp(0.75rem, 1.5vw + 0.5rem, 1.25rem);
+}
+
+.card .badge {
+  margin-bottom: 0.5rem;
+}
+.card .h5,
+.card h3 {
+  margin-bottom: 0.35rem;
+}
+.card .small + .small {
+  margin-top: 0.25rem;
+}
+.card .mt-2 {
+  margin-top: 0.6rem !important;
+}
+
+.card.position-relative {
+  transition: transform 180ms ease, box-shadow 180ms ease,
+    border-color 180ms ease, background-color 180ms ease, filter 180ms ease;
+  will-change: transform, box-shadow;
+  background: #ffffff;
+}
+
+.card.position-relative:hover,
+.card.position-relative:focus-within {
+  transform: translateY(-3px);
+  border-color: #ff78c8;
+  background-color: #ffe8f5;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 120, 200, 0.25), 0 0 32px rgba(255, 120, 200, 0.15);
+  filter: saturate(1.05);
+  cursor: pointer;
+}
+
+.card.position-relative:active {
+  transform: translateY(-1px) scale(0.997);
+}
+
+.card.position-relative:hover .h5,
+.card.position-relative:hover h3 {
+  color: var(--accent);
+  transition: color 180ms ease;
+}
+
+/* Top image for cards*/
+.sg-card-img {
+  height: clamp(160px, 22vw, 220px);
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid #272737;
+}
+
+.card.position-relative:hover .sg-card-img {
+  filter: brightness(1.03);
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .card.position-relative {
+    transition: none;
+  }
+}
+
+/* Theme cards hover (reuse your card glow) */
+.card.position-relative {
+  transition: transform 180ms ease, box-shadow 180ms ease,
+    border-color 180ms ease, background-color 180ms ease, filter 180ms ease;
+  border: 1px solid var(--card-border);
+}
+.card.position-relative:hover,
+.card.position-relative:focus-within {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 120, 200, 0.25), 0 0 32px rgba(255, 120, 200, 0.15);
+}
+
+.card-text {
+  color: var(--accent);
+}
+
+/* Card top image */
+.sg-card-img {
+  height: clamp(160px, 22vw, 220px);
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* SLAYvents */
+/* Pink theme for SLAYvents form */
+
+.inquiry-form {
+  background-color: rgb(178, 10, 119);
+}
+
+.form-slay .form-control,
+.form-slay input,
+.form-slay select,
+.form-slay textarea {
+  background: var(--accent); /* your deep pink (#ae0269) */
+  color: #fff;
+  border: 1px solid var(--bg); /* darker pink border */
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.form-slay ::placeholder {
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 1; /* Firefox */
+}
+
+.form-slay input:focus,
+.form-slay select:focus,
+.form-slay textarea:focus {
+  outline: none;
+  border-color: var(--accent); /* hot pink */
+  box-shadow: 0 0 0 2px rgba(255, 120, 200, 0.3),
+    0 0 24px rgba(255, 120, 200, 0.15);
+}
+
+/* Make dropdown options readable on pink */
+.form-slay select option {
+  background: var(--bg);
+  color: #fff;
+}
+
+/* Dark date picker icon on pink (WebKit) */
+.form-slay input[type="date"] {
+  color-scheme: dark;
+}
+.form-slay input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) hue-rotate(330deg) brightness(1.2);
+}
+
+/* Label color tweak for contrast on pink */
+.form-slay .form-label {
+  color: #ffe3f3;
+}
+
+/* Pink button */
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+.btn-accent:hover {
+  filter: brightness(1.06);
+}
+.btn-accent:active {
+  transform: translateY(1px);
+}
+
+/* Filter bar  */
+.filter-card .card-header {
+  border-bottom: 1px solid var(--card-border);
+  backdrop-filter: blur(4px);
+}
+
+.filter-card .form-label {
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+}
+
+.filter-card .card-body select,
+.filter-card .card-body input[type="date"],
+.filter-card .card-body .form-control {
+  background: #1a1220;
+  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.filter-card .card-body select:focus,
+.filter-card .card-body input[type="date"]:focus,
+.filter-card .card-body .form-control:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 120, 200, 0.25);
+}
+
+.filter-card select option {
+  background: #1a1220;
+  color: #fff;
+}
