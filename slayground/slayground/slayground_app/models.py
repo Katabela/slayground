@@ -89,11 +89,9 @@ class ClassSession(TimeStampedModel):
     notes = models.TextField(blank=True)
 
     # ---- Recurrence (kept inside ClassSession) ----
-    # Enable this on a seed session, then run the admin action to generate copies.
     recurrence_enabled = models.BooleanField(default=False, help_text="If on, this session is a seed for repeats.")
     recurrence_every_n_weeks = models.PositiveIntegerField(default=1, help_text="1 = weekly, 2 = every other week, etc.")
     recurrence_until = models.DateField(null=True, blank=True, help_text="Last date to generate (inclusive).")
-    # List of string dates "YYYY-MM-DD" to skip (holidays, closures)
     recurrence_skips = models.JSONField(default=list, blank=True, help_text='List of dates (YYYY-MM-DD) to skip')
 
     class Meta:
@@ -136,7 +134,6 @@ class ClassSession(TimeStampedModel):
                 elif isinstance(v, date):
                     out.add(v)
             except ValueError:
-                # ignore malformed entries
                 pass
         return out
 
@@ -159,7 +156,6 @@ class ClassSession(TimeStampedModel):
         created = 0
         skipped = 0
 
-        # Use aware datetimes; adding weeks keeps TZ consistency naturally.
         cursor = self.start_datetime
         while True:
             cursor = cursor + timedelta(weeks=self.recurrence_every_n_weeks)
@@ -296,9 +292,9 @@ class MediaItem(TimeStampedModel):
         if not any([self.image, self.video_url, self.audio_file, self.attachment, self.external_url]):
             raise ValidationError("Add at least one: image, video URL, audio file, attachment, or external URL.")
 
-# -----------------------
+# --------------------------------
 # Events: SLAYvents & SLAYbrations
-# -----------------------
+# --------------------------------
 class Event(TimeStampedModel):
     EVENT_TYPE_CHOICES = [
         ("PRIVATE", "SLAYvents (Private)"),

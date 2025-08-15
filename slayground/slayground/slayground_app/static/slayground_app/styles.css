@@ -1,5 +1,4 @@
 /* slayground_app/styles.css */
-/* CSS variables for easy theming */
 :root {
   --bgblack: #0f0f12;
   --bg: #ae0269;
@@ -39,22 +38,21 @@ a,
 
 a:hover,
 a:focus-visible {
-  color: #ff9bd6; /* lighter hot pink on hover/focus */
+  color: #ff9bd6;
   text-decoration-color: var(--accent);
   outline: none;
 }
 
 a:active {
-  color: #ff56b9; /* pressed state */
+  color: #ff56b9;
 }
 
-/* Text selection highlight (hot pink glow) */
 ::selection {
   background: rgba(255, 120, 200, 0.35);
   color: #fff;
 }
 
-/* Mobile tap highlight (iOS/Safari/Chrome) */
+/* Mobile tap highlight */
 a {
   -webkit-tap-highlight-color: rgba(255, 120, 200, 0.35);
 }
@@ -64,14 +62,13 @@ a {
   background: var(--nav) !important;
 }
 
-/* Navbar active link (works with .active or aria-current="page") */
+/* Navbar active link  */
 .navbar .nav-link.active,
 .navbar .nav-link[aria-current="page"] {
   color: var(--accent) !important;
   border-bottom: 2px solid var(--accent);
 }
 
-/* Optional: subtle hover underline for all links */
 a {
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
@@ -104,12 +101,11 @@ a {
   padding: 1rem;
 }
 
-/* Utility tweaks */
 .border-secondary {
   border-color: var(--card-border) !important;
 }
 .btn-light {
-  color: #000; /* readable on light button */
+  color: #000;
 }
 
 /* CARD STYLES */
@@ -184,14 +180,13 @@ a {
   filter: brightness(1.03);
 }
 
-/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .card.position-relative {
     transition: none;
   }
 }
 
-/* Theme cards hover (reuse your card glow) */
+/* Theme cards hover */
 .card.position-relative {
   transition: transform 180ms ease, box-shadow 180ms ease,
     border-color 180ms ease, background-color 180ms ease, filter 180ms ease;
@@ -230,34 +225,32 @@ a {
 .form-slay input,
 .form-slay select,
 .form-slay textarea {
-  background: var(--accent); /* your deep pink (#ae0269) */
+  background: var(--accent);
   color: #fff;
-  border: 1px solid var(--bg); /* darker pink border */
+  border: 1px solid var(--bg);
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
 }
 
 .form-slay ::placeholder {
   color: rgba(255, 255, 255, 0.85);
-  opacity: 1; /* Firefox */
+  opacity: 1;
 }
 
 .form-slay input:focus,
 .form-slay select:focus,
 .form-slay textarea:focus {
   outline: none;
-  border-color: var(--accent); /* hot pink */
+  border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(255, 120, 200, 0.3),
     0 0 24px rgba(255, 120, 200, 0.15);
 }
 
-/* Make dropdown options readable on pink */
 .form-slay select option {
   background: var(--bg);
   color: #fff;
 }
 
-/* Dark date picker icon on pink (WebKit) */
 .form-slay input[type="date"] {
   color-scheme: dark;
 }
@@ -265,7 +258,6 @@ a {
   filter: invert(1) hue-rotate(330deg) brightness(1.2);
 }
 
-/* Label color tweak for contrast on pink */
 .form-slay .form-label {
   color: #ffe3f3;
 }

@@ -107,8 +107,6 @@ def class_detail(request: HttpRequest, pk: int) -> HttpResponse:
 def book_session(request: HttpRequest, session_id: int) -> HttpResponse:
     """
     Booking form:
-    - Validates capacity and time
-    - Creates a PENDING booking (flip to CONFIRMED after Stripe/webhook)
     """
     session = get_object_or_404(
         ClassSession.objects.select_related("class_type", "instructor", "location"),
@@ -154,7 +152,7 @@ def content_hub(request: HttpRequest) -> HttpResponse:
 
     return render(request, "sg/content_hub.html", {
         "categories": categories,
-        "items": items_qs[:24],  # simple cap for the grid; adjust as desired
+        "items": items_qs[:24], 
     })
 
 
@@ -164,29 +162,18 @@ def content_hub(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def calendar_view(request: HttpRequest) -> HttpResponse:
-    """
-    Renders the calendar page (FullCalendar front-end).
-    FullCalendar will fetch events from `calendar_events`.
-    """
     return render(request, "sg/calendar.html")
 
 
 @require_GET
 def calendar_events(request: HttpRequest) -> JsonResponse:
-    """
-    JSON feed for FullCalendar.
 
-    Accepts optional GET params:
-      - start (ISO8601)
-      - end   (ISO8601)
-    """
     start_param = request.GET.get("start")
     end_param = request.GET.get("end")
 
     events_qs = ClassSession.objects.filter(is_published=True).select_related("class_type")
     now = timezone.now()
 
-    # Limit to future by default if no range provided
     if not start_param and not end_param:
         events_qs = events_qs.filter(start_datetime__gte=now)
 
@@ -204,7 +191,6 @@ def calendar_events(request: HttpRequest) -> JsonResponse:
                 end_dt = timezone.make_aware(end_dt, tz)
             events_qs = events_qs.filter(start_datetime__lte=end_dt)
     except ValueError:
-        # If parsing fails, ignore and fall back to default
         pass
 
     events: List[dict] = []
@@ -220,7 +206,7 @@ def calendar_events(request: HttpRequest) -> JsonResponse:
 
 
 # ---------------------------
-# Staff utilities (optional)
+# Staff utilities
 # ---------------------------
 
 @staff_member_required
@@ -249,7 +235,6 @@ def quick_create_session(request: HttpRequest) -> HttpResponse:
 
 @require_http_methods(["GET", "POST"])
 def signup(request):
-    # If already logged in, bounce to where they were going (or home)
     next_url = request.GET.get("next") or request.POST.get("next") or reverse("sg:home")
     if request.user.is_authenticated:
         return redirect(next_url)
@@ -277,7 +262,6 @@ def slayvents(request: HttpRequest) -> HttpResponse:
         inquiry = form.save()
         messages.success(request, "Thank you! We’ll be in touch to plan your SLAYvent 🎉")
         return redirect("sg:slayvents")
-    # Optional: showcase some private templates if you create them in admin
     templates = Event.objects.filter(event_type="PRIVATE", is_published=True).order_by("title")[:6]
     return render(request, "sg/slayvents.html", {"form": form, "templates": templates})
 
@@ -301,7 +285,7 @@ def slaybrations_register(request: HttpRequest, slug: str) -> HttpResponse:
         reg = form.save(commit=False)
         reg.user = request.user
         reg.event = event
-        reg.status = "PENDING"  # flip to CONFIRMED after payment, if charging
+        reg.status = "PENDING"
         reg.save()
         messages.success(request, "Registration received! We’ll email details shortly.")
         return redirect("sg:slaybrations_detail", slug=event.slug)
